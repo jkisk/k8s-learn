@@ -1,0 +1,28 @@
+sudo: required
+
+services:
+ - docker
+
+ before_install:
+  - docker build -t jkisk/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+# set env var CI because tests won't exit otherwise
+  - docker run -e CI=true jkisk/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t jkisk/multi-client ./client
+  - docker build -t jkisk/multi-nginx ./nginx
+  - docker build -t jkisk/multi-server ./server
+  - docker build -t jkisk/multi-worker ./worker
+
+# Login to docker CLI
+ - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+# Take images and push to docker hub
+ - docker push jkisk/multi-client
+ - docker push jkisk/multi-nginx
+ - docker push jkisk/multi-server
+ - docker push jkisk/multi-worker
+
+
+
