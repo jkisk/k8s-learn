@@ -22,18 +22,7 @@ after_success:
    - docker push jkisk/multi-server
    - docker push jkisk/multi-worker
 
-deploy:
-   provider: elasticbeanstalk
-   region: us-west-1
-   app: docker-complex
-   env: DockerComplex-env
-   bucket_name: elasticbeanstalk-us-west-1-981748390025
-   bucket_path: complex-docker
-   on:
-      branch: master
-   access_key_id: $AWS_ACCESS_KEY
-   secret_access_key: 
-      secure: $AWS_SECRET_KEY
+
 
 
 
